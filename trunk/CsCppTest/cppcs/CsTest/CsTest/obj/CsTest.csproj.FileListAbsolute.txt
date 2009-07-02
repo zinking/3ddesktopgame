@@ -1,0 +1,5 @@
+D:\cppcs\CsTest\CsTest\obj\Debug\CsTest.exe
+D:\cppcs\CsTest\CsTest\obj\Debug\CsTest.pdb
+D:\cppcs\CsTest\CsTest\obj\Debug\ResolveAssemblyReference.cache
+D:\cppcs\CsTest\CsTest\bin\Debug\CsTest.exe
+D:\cppcs\CsTest\CsTest\bin\Debug\CsTest.pdb
