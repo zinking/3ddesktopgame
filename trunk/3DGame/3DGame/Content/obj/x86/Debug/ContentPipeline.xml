@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline" xmlns:Graphics="Microsoft.Xna.Framework.Graphics" xmlns:Processors="Microsoft.Xna.Framework.Content.Pipeline.Processors">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>models\table.FBX</Source>
+      <Name>models\table</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\table.xnb</Output>
+      <Time>2009-06-30T14:19:14.852+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\table_0.xml</Key>
+        <Value>2009-06-30T14:19:40.698+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\A-D-036_0.xnb</Request>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\archmodels47_022_1_0.xnb</Request>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\archmodels47_022_1_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\table.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\table_0.xml</Output>
+      <Time>2009-06-30T14:19:14.852+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\Ground.x</Source>
+      <Name>models\Ground</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\Ground.xnb</Output>
+      <Time>2007-11-26T12:33:34+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\Ground_0.xml</Key>
+        <Value>2009-06-29T23:54:15.081+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\Checker_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\Ground.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\Ground_0.xml</Output>
+      <Time>2007-11-26T12:33:34+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\Checker.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\Checker_0.xnb</Output>
+      <Time>2007-11-26T12:33:34+08:00</Time>
+    </Item>
+    <Item>
+      <Source>C:\Users\luyang\Desktop\reference\xna\ChaseCameraSample\ChaseCamera\Content\A-D-036.jpg</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\A-D-036_0.xnb</Output>
+      <Time>2009-06-18T09:44:40+08:00</Time>
+    </Item>
+    <Item>
+      <Source>C:\Users\luyang\Desktop\reference\xna\ChaseCameraSample\ChaseCamera\Content\archmodels47_022_1.jpg</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\archmodels47_022_1_0.xnb</Output>
+      <Time>2009-06-28T20:07:36+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\archmodels47_022_1.jpg</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\archmodels47_022_1_0.xnb</Output>
+      <Time>2009-06-28T20:07:36+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball1.FBX</Source>
+      <Name>models\ball1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball1.xnb</Output>
+      <Time>2009-06-30T14:23:21.813+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\ball1_0.xml</Key>
+        <Value>2009-06-30T14:23:26.304+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball1_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\ball1.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\ball1_0.xml</Output>
+      <Time>2009-06-30T14:23:21.813+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball1.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball1_0.xnb</Output>
+      <Time>2009-06-29T14:06:36.464+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball0.FBX</Source>
+      <Name>models\ball0</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball0.xnb</Output>
+      <Time>2009-06-30T14:30:22.859+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\ball0_0.xml</Key>
+        <Value>2009-06-30T17:02:13.246+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\whiteball_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\ball2.FBX</Source>
+      <Name>models\ball2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball2.xnb</Output>
+      <Time>2009-06-30T14:26:03.412+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\ball2_0.xml</Key>
+        <Value>2009-06-30T17:02:14.744+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball2_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\ball3.FBX</Source>
+      <Name>models\ball3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball3.xnb</Output>
+      <Time>2009-06-30T14:26:39.376+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\ball3_0.xml</Key>
+        <Value>2009-06-30T17:02:15.184+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball3_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\ball4.FBX</Source>
+      <Name>models\ball4</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball4.xnb</Output>
+      <Time>2009-06-30T14:26:56.355+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\ball4_0.xml</Key>
+        <Value>2009-06-30T17:02:15.626+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball4_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\ball5.FBX</Source>
+      <Name>models\ball5</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball5.xnb</Output>
+      <Time>2009-06-30T14:27:19.49+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\ball5_0.xml</Key>
+        <Value>2009-06-30T17:02:16.062+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball5_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\ball6.FBX</Source>
+      <Name>models\ball6</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball6.xnb</Output>
+      <Time>2009-06-30T14:27:37.454+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\ball6_0.xml</Key>
+        <Value>2009-06-30T17:02:16.503+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball6_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\ball7.FBX</Source>
+      <Name>models\ball7</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball7.xnb</Output>
+      <Time>2009-06-30T14:28:16.644+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\ball7_0.xml</Key>
+        <Value>2009-06-30T17:02:16.903+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball7_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\ball8.FBX</Source>
+      <Name>models\ball8</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball8.xnb</Output>
+      <Time>2009-06-30T14:28:37.107+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\ball8_0.xml</Key>
+        <Value>2009-06-30T17:02:17.317+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball8_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\ball9.FBX</Source>
+      <Name>models\ball9</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball9.xnb</Output>
+      <Time>2009-06-30T14:29:46.702+08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\models\ball9_0.xml</Key>
+        <Value>2009-06-30T17:02:17.728+08:00</Value>
+      </Dependency>
+      <Request>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball9_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>models\ball0.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\ball0_0.xml</Output>
+      <Time>2009-06-30T14:30:22.859+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\whiteball.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\whiteball_0.xnb</Output>
+      <Time>2009-06-29T14:06:36.42+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball2.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\ball2_0.xml</Output>
+      <Time>2009-06-30T14:26:03.412+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball2.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball2_0.xnb</Output>
+      <Time>2009-06-29T14:06:36.488+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball3.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\ball3_0.xml</Output>
+      <Time>2009-06-30T14:26:39.376+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball3.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball3_0.xnb</Output>
+      <Time>2009-06-29T14:06:36.51+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball4.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\ball4_0.xml</Output>
+      <Time>2009-06-30T14:26:56.355+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball4.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball4_0.xnb</Output>
+      <Time>2009-06-29T14:06:36.533+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball5.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\ball5_0.xml</Output>
+      <Time>2009-06-30T14:27:19.49+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball5.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball5_0.xnb</Output>
+      <Time>2009-06-29T14:06:36.557+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball6.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\ball6_0.xml</Output>
+      <Time>2009-06-30T14:27:37.454+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball6.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball6_0.xnb</Output>
+      <Time>2009-06-29T14:06:36.58+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball7.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\ball7_0.xml</Output>
+      <Time>2009-06-30T14:28:16.644+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball7.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball7_0.xnb</Output>
+      <Time>2009-06-29T14:06:36.603+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball8.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\ball8_0.xml</Output>
+      <Time>2009-06-30T14:28:37.107+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball8.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball8_0.xnb</Output>
+      <Time>2009-06-29T14:06:36.142+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball9.FBX</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\models\ball9_0.xml</Output>
+      <Time>2009-06-30T14:29:46.702+08:00</Time>
+    </Item>
+    <Item>
+      <Source>models\ball9.bmp</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\models\ball9_0.xnb</Output>
+      <Time>2009-06-29T14:06:36.177+08:00</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <TargetPlatform>Windows</TargetPlatform>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>false</CompressContent>
+      <RootDirectory>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\Content\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\luyang\Documents\Visual Studio 2008\Projects\3DGame\3DGame\bin\x86\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2008-10-10T17:42:32+08:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2008-10-10T17:43:28+08:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2008-10-10T17:43:18+08:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2008-10-10T17:48:18+08:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2008-10-10T17:48:50+08:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.0.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2009-06-23T11:30:47.454+08:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>
