@@ -1,5 +1,6 @@
 
 #include "BilliardCollisionListener.h"
+#include "ObjectPosition.h"
 
 
 BilliardCollisionListener::BilliardCollisionListener(RenderWindow* win, CollideCamera* cam,World* world,
@@ -111,30 +112,30 @@ void BilliardCollisionListener::handleBallDropping()
 
 void BilliardCollisionListener::handleAiming()
 {
-	if (mKeyboard->isKeyDown(OIS::KC_EQUALS))
-	{
-		//mDebugText=StringConverter::toString(lineNode->);
-		angle+=0.02;
-		cueNode->setPosition(ball->getPosition().x-124*cos(angle),-50,ball->getPosition().z-124*sin(angle));
-		cueNode->pitch(Radian(0.02));
-		targetNode->setPosition(ball->getPosition().x+124*cos(angle),9,ball->getPosition().z+124*sin(angle));
-		lineNode->setPosition(ball->getPosition().x+100*cos(angle),0,ball->getPosition().z+100*sin(angle));
-		lineNode->yaw(Radian(-0.02));
-	}
-	if (mKeyboard->isKeyDown(OIS::KC_MINUS))
-	{
-		angle-=0.02;
-		cueNode->setPosition(ball->getPosition().x-124*cos(angle),-50,ball->getPosition().z-124*sin(angle));
-		cueNode->pitch(Radian(-0.02));
-		targetNode->setPosition(ball->getPosition().x+124*cos(angle),9,ball->getPosition().z+124*sin(angle));
-		lineNode->setPosition(ball->getPosition().x+100*cos(angle),0,ball->getPosition().z+100*sin(angle));
-		lineNode->yaw(Radian(+0.02));
-	}
+	//if (mKeyboard->isKeyDown(OIS::KC_EQUALS))
+	//{
+	//	//mDebugText=StringConverter::toString(lineNode->);
+	//	angle+=0.02;
+	//	cueNode->setPosition(ball->getPosition().x-124*cos(angle),-50,ball->getPosition().z-124*sin(angle));
+	//	cueNode->pitch(Radian(0.02));
+	//	targetNode->setPosition(ball->getPosition().x+124*cos(angle),9,ball->getPosition().z+124*sin(angle));
+	//	lineNode->setPosition(ball->getPosition().x+100*cos(angle),0,ball->getPosition().z+100*sin(angle));
+	//	lineNode->yaw(Radian(-0.02));
+	//}
+	//if (mKeyboard->isKeyDown(OIS::KC_MINUS))
+	//{
+	//	angle-=0.02;
+	//	cueNode->setPosition(ball->getPosition().x-124*cos(angle),-50,ball->getPosition().z-124*sin(angle));
+	//	cueNode->pitch(Radian(-0.02));
+	//	targetNode->setPosition(ball->getPosition().x+124*cos(angle),9,ball->getPosition().z+124*sin(angle));
+	//	lineNode->setPosition(ball->getPosition().x+100*cos(angle),0,ball->getPosition().z+100*sin(angle));
+	//	lineNode->yaw(Radian(+0.02));
+	//}
 }
 
 void BilliardCollisionListener::handleCue()
 {
-	if (ballsStoped())
+	/*if (ballsStoped())
 	{
 		cueNode->setVisible(true);
 		targetNode->setVisible(true);
@@ -153,42 +154,42 @@ void BilliardCollisionListener::handleCue()
 		targetNode->setVisible(false);
 		lineNode->setVisible(false);
 		cueVisible=false;
-	}
+	}*/
 }
 
 void BilliardCollisionListener::handleStriking()
 {
-	if (mKeyboard->isKeyDown(OIS::KC_SPACE))
-	{
-		if (cueVisible)
-		{
-			stroken=false;
-			if(!toBall)
-				cueNode->translate(Vector3(-cos(angle),0,-sin(angle)));
-			else
-				cueNode->translate(Vector3(cos(angle),0,sin(angle)));
-			Vector3 tmp(ball->getPosition()-cueNode->getPosition());
-			//mDebugText=StringConverter::toString(tmp.length())+" "+StringConverter::toString(dis);
-			if (tmp.length()<=dis||tmp.length()>=dis+40)
-				toBall=!toBall;
-			cuePosition=cueNode->getPosition();
-		}
-	}
-	else if(!stroken)
-	{
-		Vector3 tmp(ball->getPosition()-cueNode->getPosition());
-		if (tmp.length()>=dis)
-		{
-			cueNode->translate(Vector3(6*cos(angle),0,6*sin(angle)));
-		}
-		else
-		{
-			white=false;
-			ball->setLinearVelocity(Vector3(ball->getPosition().x-cuePosition.x,0,
-				ball->getPosition().z-cuePosition.z).normalisedCopy() * 400 
-				* ((ball->getPosition()-cuePosition).length()-dis)/40);
-			stroken=true;
-			toBall=false;
-		}
-	}
+	//if (mKeyboard->isKeyDown(OIS::KC_SPACE))
+	//{
+	//	if (cueVisible)
+	//	{
+	//		stroken=false;
+	//		if(!toBall)
+	//			cueNode->translate(Vector3(-cos(angle),0,-sin(angle)));
+	//		else
+	//			cueNode->translate(Vector3(cos(angle),0,sin(angle)));
+	//		Vector3 tmp(ball->getPosition()-cueNode->getPosition());
+	//		//mDebugText=StringConverter::toString(tmp.length())+" "+StringConverter::toString(dis);
+	//		if (tmp.length()<=dis||tmp.length()>=dis+40)
+	//			toBall=!toBall;
+	//		cuePosition=cueNode->getPosition();
+	//	}
+	//}
+	//else if(!stroken)
+	//{
+	//	Vector3 tmp(ball->getPosition()-cueNode->getPosition());
+	//	if (tmp.length()>=dis)
+	//	{
+	//		cueNode->translate(Vector3(6*cos(angle),0,6*sin(angle)));
+	//	}
+	//	else
+	//	{
+	//		white=false;
+	//		ball->setLinearVelocity(Vector3(ball->getPosition().x-cuePosition.x,0,
+	//			ball->getPosition().z-cuePosition.z).normalisedCopy() * 400 
+	//			* ((ball->getPosition()-cuePosition).length()-dis)/40);
+	//		stroken=true;
+	//		toBall=false;
+	//	}
+	//}
 }

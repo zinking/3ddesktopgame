@@ -54,7 +54,12 @@ public:
 			//PlaySound(TEXT ("215.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		}
 
-		
+		//if (mKeyboard->isKeyDown(OIS::KC_T))
+		//{
+		//	OgreRefApp::Box *b=mWorld->createBox("testbox",20,20,20,Vector3(0,15,0));
+		//	b->getEntity()->setMaterialName("Billiards/Wood");
+
+		//}
 		
 		return true;
 	}
