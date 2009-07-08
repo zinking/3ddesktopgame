@@ -206,6 +206,10 @@
 				RelativePath=".\MyFrameListener.h"
 				>
 			</File>
+			<File
+				RelativePath=".\ObjectPosition.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
