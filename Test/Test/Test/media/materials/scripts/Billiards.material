@@ -1,4 +1,4 @@
-material Billiards
+material Billiards/Table
 {
 	technique
 	{
@@ -13,17 +13,47 @@ material Billiards
 		}
 	}
 }
-material Examples/Rocky
+material Billiards/Wood
 {
 	technique
 	{
 		pass
 		{
-			ambient 0.5 0.5 0.5
+			ambient 0.7 0.7 0.7
 
 			texture_unit
 			{
 				texture wood.jpg
+			}
+		}
+	}
+}
+material Billiards/Bas
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.7 0.7 0.7
+
+			texture_unit
+			{
+				texture bas.jpg
+			}
+		}
+	}
+}
+material Billiards/Cue
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.7 0.7 0.7
+
+			texture_unit
+			{
+				texture cue.jpg
 			}
 		}
 	}
