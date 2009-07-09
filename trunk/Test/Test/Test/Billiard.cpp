@@ -19,6 +19,7 @@ Description: Somewhere to play in the sand...
 -----------------------------------------------------------------------------
 */
 
+#include "stdafx.h"
 #include "BilliardCollisionListener.h"
 
 // Hacky globals
@@ -215,6 +216,14 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
 int main(int argc, char **argv)
 #endif
 {
+
+	SetProjectorViewport(SCREEN_LEFT, SCREEN_RIGHT,SCREEN_BOTTOM, SCREEN_TOP);
+	SetNearClipDistance(0.0001);
+	RB_InitializeRigidBody();
+	RB_LoadProfile("cal.cal");
+	RB_LoadDefinition("rbd.rdef");
+	RB_StartCameras();
+
 	// Create application object
 	BspCollisionApplication app;
 
