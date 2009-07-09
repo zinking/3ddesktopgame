@@ -135,6 +135,8 @@ void BilliardCollisionListener::handleAiming()
 
 void BilliardCollisionListener::handleCue()
 {
+	Vector3 tmp=getCuePoint1();
+	mDebugText=StringConverter::toString(tmp.x)+ " "+StringConverter::toString(tmp.y)+" "+StringConverter::toString(tmp.z);
 	/*if (ballsStoped())
 	{
 		cueNode->setVisible(true);
