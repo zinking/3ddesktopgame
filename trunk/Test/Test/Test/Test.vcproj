@@ -136,7 +136,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OIS.lib CEGUIBase.lib OgreGUIRenderer.lib ReferenceAppLayer.lib"
+				AdditionalDependencies="OgreMain.lib OIS.lib CEGUIBase.lib OgreGUIRenderer.lib ReferenceAppLayer.lib NPPointCloud.lib NPRigidBody.lib optitrackuuid.lib StereoGraphics.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -186,6 +186,10 @@
 				RelativePath=".\BilliardCollisionListener.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\EyesTracking.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="资源文件"
@@ -203,11 +207,35 @@
 				>
 			</File>
 			<File
+				RelativePath=".\EyesTracking.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MyFrameListener.h"
 				>
 			</File>
 			<File
+				RelativePath=".\NPPointCloud.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nprigidbody.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ObjectPosition.h"
+				>
+			</File>
+			<File
+				RelativePath=".\optitrack.h"
+				>
+			</File>
+			<File
+				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StereoGraphics.h"
 				>
 			</File>
 		</Filter>
