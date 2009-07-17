@@ -1,0 +1,7 @@
+<RigidBodyProfile Version="1.0">
+    <RigidBody Version="1.0" Name="Rigid Body 1" ModelFilename="" ID="1" Enabled="True" ColorR="0" ColorG="255" ColorB="0" ModelScale="0.000000" ModelRotX="0.000000" ModelRotY="0.000000" ModelRotZ="0.000000" ModelTransX="0.000000" ModelTransY="0.000000" ModelTransZ="0.000000" Flexibility="0.100000" RotationConst="-1.000000" TranslationConst="-1.000000">
+        <Marker X="0.133085" Y="-0.008254" Z="0.116342" />
+        <Marker X="-0.091207" Y="0.002206" Z="-0.084818" />
+        <Marker X="-0.041877" Y="0.006047" Z="-0.031524" />
+    </RigidBody>
+</RigidBodyProfile>
