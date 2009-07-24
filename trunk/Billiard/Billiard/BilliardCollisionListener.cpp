@@ -2,35 +2,36 @@
 
 #include "BilliardCollisionListener.h"
 #include "ObjectPosition.h"
-
+#include "Obstacle.h"
 
 BilliardCollisionListener::BilliardCollisionListener(RenderWindow* win, CollideCamera* cam,World* world,
-						  ApplicationObject *ball,ApplicationObject *balls[9],ApplicationObject *cueNode,
-						  SceneManager* sceneManager)
+						  ApplicationObject *ball,ApplicationObject *balls[9],RigidBody *bodies[2],
+						  ApplicationObject *obstacle,SceneNode *cueNode)
 						  : MyFrameListener(win, cam)
 {
 	mWorld=world;
+	this->camera=cam;
 	this->ball=ball;
 	for (int i=0;i<9;i++)
 	{
 		this->balls[i]=balls[i];
 		visible[i]=true;
 	}
+	for (int i=0;i<2;i++)
+	{
+		this->bodies[i]=bodies[i];
+		//this->obstacle[i]=obstacle[i];
+	}
+	this->obstacle=obstacle;
 	this->cueNode=cueNode;
-	//cueNode=sceneManager->getSceneNode("cueNode");
-	targetNode=sceneManager->getSceneNode("targetNode");
-	lineNode=sceneManager->getSceneNode("lineNode");
-	toBall=false;
-	stroken=true;
-	cueVisible=true;
-	white=false;
-	dis=(ball->getPosition()-cueNode->getPosition()).length();
+	whiteBallDropped=false;
 	angle=0;
 	angleUp=0;
-	c=0;
+	lastPosition=cueNode->getPosition();
 }
 
-bool BilliardCollisionListener::ballsStoped()
+//Check whether all the balls are stopped
+bool BilliardCollisionListener::ballsStopped()
 {
 	int i;
 	for (i=0;i<9;i++)
@@ -45,29 +46,47 @@ bool BilliardCollisionListener::ballsStoped()
 		return false;
 }
 
+//Adjust the balls' velocities
 void BilliardCollisionListener::adjustBallVelocities()
 {
-	if (white)
+	//If the white ball is dropped, take it onto the table and set
+	//its velocity to zero.
+	if (whiteBallDropped)
 	{
 		ball->setLinearVelocity(0,0,0);
+		ball->setAngularVelocity(0,0,0);
 		ball->setPosition(-100,9,0);
 	}
-	if (ball->getLinearVelocity().length()<0.1)
+	//If the balls' velocity is less than the threshold of the
+	//velocity, then set the velocity to zero. If this is not done, 
+	//the physical engine will finally make the balls move extremely
+	//slow, but not stopped.
+	if (ball->getLinearVelocity().length()<VELOCITY_THRESHOLD)
 		ball->setLinearVelocity(0,0,0);
 	else
+	{
+		Vector3 v=ball->getLinearVelocity();
+		if (v.y!=0)
+			ball->setLinearVelocity(v.x,0,v.z);
 		ball->setLinearVelocity(ball->getLinearVelocity()-5*timeSinceLastFrame*ball->getLinearVelocity().normalisedCopy());
-	if (ball->getAngularVelocity().length()<0.1)
+	}
+	if (ball->getAngularVelocity().length()<VELOCITY_THRESHOLD)
 		ball->setAngularVelocity(0,0,0);
 	else
 		ball->setAngularVelocity(ball->getAngularVelocity()-5*timeSinceLastFrame*ball->getAngularVelocity().normalisedCopy());
 
 	for (int i=0;i<9;i++)
 	{
-		if (balls[i]->getLinearVelocity().length()<0.1)
+		if (balls[i]->getLinearVelocity().length()<VELOCITY_THRESHOLD)
 			balls[i]->setLinearVelocity(0,0,0);
 		else
+		{
+			Vector3 v=balls[i]->getLinearVelocity();
+			if (v.y!=0)
+				balls[i]->setLinearVelocity(v.x,0,v.z);
 			balls[i]->setLinearVelocity(balls[i]->getLinearVelocity()-5*timeSinceLastFrame*balls[i]->getLinearVelocity().normalisedCopy());
-		if (balls[i]->getAngularVelocity().length()<0.1)
+		}
+		if (balls[i]->getAngularVelocity().length()<VELOCITY_THRESHOLD)
 			balls[i]->setAngularVelocity(0,0,0);
 		else
 			balls[i]->setAngularVelocity(balls[i]->getAngularVelocity()-5*timeSinceLastFrame*balls[i]->getAngularVelocity().normalisedCopy());
@@ -78,22 +97,25 @@ void BilliardCollisionListener::adjustBallVelocities()
 void BilliardCollisionListener::handleBallDropping()
 {
 	Vector3 tmp=ball->getPosition();
+	//If the white ball enter the area of pockets, make it drop under the table.
 	if ((tmp.x>-6&&tmp.x<6&&(tmp.z>70||tmp.z<-70))||
 		((tmp.x>140||tmp.x<-140)&&(tmp.z>67||tmp.z<-67)))
 	{
+		//Disable the collision detection of the ball so that it can drop down. 
 		ball->setCollisionEnabled(false);
 		ball->setLinearVelocity(0,-50,0);
 		
 	}
+	//If the white ball's position is lower than -100 then make it stop.
 	if (ball->getPosition().y<-100)
 	{
-		//mDebugText=StringConverter::toString(ball->getPosition().x);
 		ball->setLinearVelocity(0,0,0);
-		if (ballsStoped())
+		//If all the balls have stopped, set whiteBallDropped to true in order to 
+		//reset the white ball's position in the next frame.
+		if (ballsStopped())
 		{
 			ball->setCollisionEnabled(true);
-			//ball->setPosition(-100,9,0);
-			white=true;
+			whiteBallDropped=true;
 		}
 	}
 	
@@ -115,151 +137,157 @@ void BilliardCollisionListener::handleBallDropping()
 	}
 }
 
-void BilliardCollisionListener::handleAiming()
+void BilliardCollisionListener::handleObstacle()
 {
-	//if (mKeyboard->isKeyDown(OIS::KC_EQUALS))
-	//{
-	//	//mDebugText=StringConverter::toString(lineNode->);
-	//	angle+=0.02*40*timeSinceLastFrame;
-	//	cueNode->setPosition(ball->getPosition().x-124*cos(angle),-50,ball->getPosition().z-124*sin(angle));
-	//	cueNode->pitch(Radian(0.02*40*timeSinceLastFrame));
-	//	targetNode->setPosition(ball->getPosition().x+124*cos(angle),9,ball->getPosition().z+124*sin(angle));
-	//	lineNode->setPosition(ball->getPosition().x+100*cos(angle),0,ball->getPosition().z+100*sin(angle));
-	//	lineNode->yaw(Radian(-0.02*40*timeSinceLastFrame));
-	//}
-	//if (mKeyboard->isKeyDown(OIS::KC_MINUS))
-	//{
-	//	angle-=0.02*40*timeSinceLastFrame;
-	//	cueNode->setPosition(ball->getPosition().x-124*cos(angle),-50,ball->getPosition().z-124*sin(angle));
-	//	cueNode->pitch(Radian(-0.02*40*timeSinceLastFrame));
-	//	targetNode->setPosition(ball->getPosition().x+124*cos(angle),9,ball->getPosition().z+124*sin(angle));
-	//	lineNode->setPosition(ball->getPosition().x+100*cos(angle),0,ball->getPosition().z+100*sin(angle));
-	//	lineNode->yaw(Radian(+0.02*40*timeSinceLastFrame));
-	//}
+	/*for (int i=0;i<2;i++)
+	{
+		std::vector<Vector3> v=bodies[i]->track();
+		obstacle[i]->render(v);
+	}*/
+	std::vector<Vector3> points=bodies[0]->track();
+	//Vector3* obstaclePos=getObstaclePosition(TRIANGLE_OBSTACLE);
+	Vector3 obstaclePos;
+	for (int i=0;i<points.size();i++)
+	{
+		obstaclePos=obstaclePos+points[i];
+	}
+	obstaclePos=obstaclePos/points.size();
 
+	//if (obstaclePos!=NULL)
+	{
+		//obstacle->yaw(-obstacleAngle);
+		float obstacleY=obstaclePos.y*RATIO_Y;
+		if(obstacleY<15)
+			obstacle->setPosition((obstaclePos.x+OFFSET_X)*RATIO_X,15,-(obstaclePos.z+OFFSET_Z)*RATIO_Z);
+		else
+			obstacle->setPosition((obstaclePos.x+OFFSET_X)*RATIO_X,obstacleY,-(obstaclePos.z+OFFSET_Z)*RATIO_Z);
+		
+		/*Vector3 v=Vector3(points[1].x-points[0].x,0,points[0].z-points[1].z);
+		if (v.length()> 0.01 && abs(v.x)>0.01)
+		{
+			obstacleAngle=v.angleBetween(Vector3(1,0,0));
+			if (points[0].z>points[1].z)
+			{
+				obstacleAngle=-obstacleAngle;
+			}
+		}
+		
+		obstacle->yaw(obstacleAngle);*/
+		//delete obstaclePos;
+	}
+}
+
+void BilliardCollisionListener::handleCamera()
+{
+	Vector3* camPos=getEyePosition();
+	if (camPos!=NULL)
+	{
+		/*camera->translate(Vector3(-camTrans,0,0));
+		camera->yaw(Radian(-camAngle));
+		camAngle=-atan(camPos->x/camPos->y);
+		camTrans=camPos->x*500;
+		camera->yaw(Radian(camAngle));
+		camera->translate(Vector3(camTrans,0,0));*/
+		delete camPos;
+	}
 }
 
 void BilliardCollisionListener::handleCue()
 {
-	cueNode->setLinearVelocity(0,0,0);
-	cueNode->setAngularVelocity(0,0,0);
-
-	Vector3 **tmp = NULL;
+	Vector3 **cuePoints = NULL;
 	if (isFrameAvailable()) {
-		tmp = getCuePoints();
-		if (tmp != NULL)
+		handleCamera();
+		handleObstacle();
+		//Read the points' position on the cue.
+		cuePoints = getCuePoints();
+		if (cuePoints != NULL)
 		{
+			//Calculate the vector of the cue. The z-axis of the real coordinates is 
+			//reverse to the z-axis of the game coordinates.
+			Vector3 cueVector=Vector3(cuePoints[0]->x-cuePoints[1]->x,
+				cuePoints[0]->y-cuePoints[1]->y,cuePoints[1]->z-cuePoints[0]->z);
+			//Roll and pitch the cue back to the initial position.
 			cueNode->roll(-angleUp);
 			cueNode->pitch(-angle);
-			Radian tmpAngle=Vector3(tmp[0]->x-tmp[1]->x,0,tmp[1]->z-tmp[0]->z).angleBetween(Vector3(1,0,0));
-			if (tmp[0]->z>tmp[1]->z)
+			//Calculate the angle for pitch
+			angle=Vector3(cuePoints[0]->x-cuePoints[1]->x,0,cuePoints[1]->z-cuePoints[0]->z)
+				.angleBetween(Vector3(1,0,0));
+			if (cuePoints[0]->z>cuePoints[1]->z)
 			{
-				tmpAngle=-tmpAngle;
+				angle=-angle;
 			}
-			/*if (abs(tmpAngle.valueDegrees()-angle.valueDegrees())<100||angle.valueDegrees()==0
-				||abs(tmpAngle.valueDegrees())+abs(angle.valueDegrees())>340)*/
-			//{
-				angle=tmpAngle;
-			//}
-			tmpAngle=Vector3(tmp[0]->x-tmp[1]->x,tmp[0]->y-tmp[1]->y,tmp[1]->z-tmp[0]->z)
-				.angleBetween(Vector3(tmp[0]->x-tmp[1]->x,0,tmp[1]->z-tmp[0]->z));
-			angleUp=tmpAngle;
-			if (tmp[0]->y<tmp[1]->y)
+			//Calculate the angle for roll
+			angleUp=cueVector.angleBetween(Vector3(cueVector.x,0,cueVector.z));
+			if (cuePoints[0]->y<cuePoints[1]->y)
 			{
 				angleUp=-angleUp;
 			}
-
-			//mDebugText=StringConverter::toString(tmp[0]->x)+" "+StringConverter::toString(tmp[0]->y)+" "+StringConverter::toString(tmp[0]->z);
-			//mDebugText=StringConverter::toString(angle.valueDegrees());
-			cueNode->setPosition(tmp[0]->x*500-62*cos((float)angle.valueRadians()),
-				9-62*sin((float)angleUp.valueRadians()),
-				-tmp[0]->z*294-62*sin((float)angle.valueRadians()));
-			mDebugText=StringConverter::toString(angle.valueDegrees())+" "+StringConverter::toString(angleUp.valueDegrees());
-			lastPosition=cueNode->getPosition();
-
+			float cueY=(cuePoints[0]->y+OFFSET_Y)*RATIO_Y;
+			//If the height of the cue's position is too low, set it to the lowest position.
+			if(cueY<LOWEST_Y)
+				cueNode->setPosition((cuePoints[0]->x+OFFSET_X)*RATIO_X,LOWEST_Y,-(cuePoints[0]->z+OFFSET_Z)*RATIO_Z);
+			else
+				cueNode->setPosition((cuePoints[0]->x+OFFSET_X)*RATIO_X,cueY,-(cuePoints[0]->z+OFFSET_Z)*RATIO_Z);
+			
+			//Pitch and roll the cue.
 			cueNode->pitch(angle);
 			cueNode->roll(angleUp);
-
-			/*if (Vector3(tmp[0]->x-ball->getPosition().x,ball->getPosition().y,-tmp[0]->z-ball->getPosition().z).length()<=120)
+			
+			Radian ang=(cueNode->getPosition()-ball->getPosition()).angleBetween(cueVector);
+			//The distance from the white ball to the cue. 
+			float d=(ball->getPosition()-cueNode->getPosition()).length()*sin(ang.valueRadians());
+			//The rough position of the touch point between the ball and the cue if the touch happens.
+			float touchPosition=(ball->getPosition()-cueNode->getPosition()).length();
+			
+			if (d<=TOUCH_DISTANCE&&d<lastD[0]&&ang.valueDegrees()<90&&touchPosition<=CUE_LENGTH
+				&&touchPosition>=0)
 			{
-				ball->setLinearVelocity(400,0,0);
-			}*/
+				whiteBallDropped=false;
+				//Calculate the ball's velocity according to the change of the position of the touch point.
+				ball->setLinearVelocity(
+					0.5*(Vector3(cueNode->getPosition().x-touchPosition*cos(angle.valueRadians()),0,
+					cueNode->getPosition().z-touchPosition*sin(angle.valueRadians()))
+					-Vector3(lastPosition.x-touchPosition*cos(lastAngle.valueRadians()),0,
+					lastPosition.z-touchPosition*sin(lastAngle.valueRadians())))
+					/timeSinceLastFrame);
+			}
+			lastD[0]=d;
+			for (int i=0;i<9;i++)
+			{
+				ang=(cueNode->getPosition()-balls[i]->getPosition()).angleBetween(cueVector);
+				d=(balls[i]->getPosition()-cueNode->getPosition()).length()*sin(ang.valueRadians());
+				touchPosition=(balls[i]->getPosition()-cueNode->getPosition()).length();
+				if (d<=TOUCH_DISTANCE&&d<lastD[i]&&ang.valueDegrees()<90&&touchPosition<=CUE_LENGTH
+					&&touchPosition>=0)
+				{
+					whiteBallDropped=false;
+					balls[i]->setLinearVelocity(
+						0.5*(Vector3(cueNode->getPosition().x-touchPosition*cos(angle.valueRadians()),0,
+						cueNode->getPosition().z-touchPosition*sin(angle.valueRadians()))
+						-Vector3(lastPosition.x-touchPosition*cos(lastAngle.valueRadians()),0,
+						lastPosition.z-touchPosition*sin(lastAngle.valueRadians())))
+						/timeSinceLastFrame);
+				}
+				lastD[i+1]=d;
+			}
+			lastPosition=cueNode->getPosition();
+			lastAngle=angle;
+			
 		}
 		else
 		{
-			//mDebugText = "null";
+			//If the position of the points on the cue are not detected, 
+			//set the cue to the position in last frame. 
 			cueNode->setPosition(lastPosition);
 		}
 	}
 	else
 	{
-		//mDebugText = "not available";
 		cueNode->setPosition(lastPosition);
 	}
-
 	
-	/*if (ballsStoped())
+	if (cuePoints != NULL)
 	{
-		cueNode->setVisible(true);
-		targetNode->setVisible(true);
-		lineNode->setVisible(true);
-		cueVisible=true;
-		if(stroken)
-		{
-			cueNode->setPosition(ball->getPosition().x-124*cos(angle),-50,ball->getPosition().z-124*sin(angle));
-			targetNode->setPosition(ball->getPosition().x+124*cos(angle),9,ball->getPosition().z+124*sin(angle));
-			lineNode->setPosition(ball->getPosition().x+100*cos(angle),0,ball->getPosition().z+100*sin(angle));
-		}
+		delete cuePoints[0]; delete cuePoints[1]; delete [] cuePoints;
 	}
-	else
-	{
-		cueNode->setVisible(false);
-		targetNode->setVisible(false);
-		lineNode->setVisible(false);
-		cueVisible=false;
-	}*/
-
-	
-	if (tmp != NULL)
-	{
-		delete tmp[0]; delete tmp[1]; delete [] tmp;
-	}
-}
-
-void BilliardCollisionListener::handleStriking()
-{
-	//if (mKeyboard->isKeyDown(OIS::KC_SPACE))
-	//{
-	//	if (cueVisible)
-	//	{
-	//		stroken=false;
-	//		if(!toBall)
-	//			cueNode->translate(Vector3(-cos(angle),0,-sin(angle))*40*timeSinceLastFrame);
-	//		else
-	//			cueNode->translate(Vector3(cos(angle),0,sin(angle))*40*timeSinceLastFrame);
-	//		Vector3 tmp(ball->getPosition()-cueNode->getPosition());
-	//		//mDebugText=StringConverter::toString(tmp.length())+" "+StringConverter::toString(dis);
-	//		if (tmp.length()<=dis||tmp.length()>=dis+40)
-	//			toBall=!toBall;
-	//		cuePosition=cueNode->getPosition();
-	//	}
-	//}
-	//else if(!stroken)
-	//{
-	//	Vector3 tmp(ball->getPosition()-cueNode->getPosition());
-	//	if (tmp.length()>=dis)
-	//	{
-	//		cueNode->translate(Vector3(6*cos(angle),0,6*sin(angle))*40*timeSinceLastFrame);
-	//	}
-	//	else
-	//	{
-	//		white=false;
-	//		ball->setLinearVelocity(Vector3(ball->getPosition().x-cuePosition.x,0,
-	//			ball->getPosition().z-cuePosition.z).normalisedCopy() * 400 
-	//			* ((ball->getPosition()-cuePosition).length()-dis)/40);
-	//		stroken=true;
-	//		toBall=false;
-	//	}
-	//}
-
 }

@@ -105,7 +105,7 @@ public:
 		mNumScreenShots = 0;
 		mTimeUntilNextToggle = 0;
 
-		showDebugOverlay(true);
+		showDebugOverlay(false);
 
 		//mDebugText = "Press SPACE to throw the ball";
 	}
