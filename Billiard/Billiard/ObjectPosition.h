@@ -4,72 +4,80 @@
 #include "stdafx.h"
 #include "nprigidbody.h"
 
-//String getInfo() 
-//{
-//	if (RB_GetLatestFrame() == NPRESULT_SUCCESS)
-//	{
-//		float x, y, z, qx, qy, qz, qw, h, a, b;
-//		RB_GetRigidBodyLocation(0, &x, &y, &z, &qx, &qy, &qz, &qw, &h, &a, &b);
-//		return StringConverter::toString(x) + " " + StringConverter::toString(y) + " " + StringConverter::toString(z);
-//	}
-//	else
-//	{
-//		return "";
-//	}
-//}
-
 bool isFrameAvailable()
 {
 	return RB_GetLatestFrame() == NPRESULT_SUCCESS;
 }
 
-String getFrameMarker()
-{
-	int count = RB_FrameMarkerCount();
-	//return StringConverter::toString(count);
-	String ret = "";
-
-	for (int i = 0; i < count; ++i)
-	{
-		ret += StringConverter::toString(RB_FrameMarkerX(i)) + " ";
-	}
-	return ret;
-}
-
 Vector3** getCuePoints()
 {
-	/*if (RB_GetLatestFrame() == NPRESULT_SUCCESS && RB_IsRigidBodyTracked(0))*/
-	if (RB_IsRigidBodyTracked(0))
+	if (RB_IsRigidBodyTracked(CUE_INDEX))
 	{
-		float x, y, z, qx, qy, qz, qw, h, a, b;
-		RB_GetRigidBodyLocation(0, &x, &y, &z, &qx, &qy, &qz, &qw, &h, &a, &b);
+		/*float x, y, z, qx, qy, qz, qw, heading, attitude, bank;
+		RB_GetRigidBodyLocation(CUE_INDEX, &x, &y, &z, &qx, &qy, &qz, &qw, &heading, &attitude, &bank);
 
-		float x1 = RB_FrameMarkerX(0), y1 = RB_FrameMarkerY(0), z1 = RB_FrameMarkerZ(0), 
-			x2 = RB_FrameMarkerX(1), y2 = RB_FrameMarkerY(1), z2 = RB_FrameMarkerZ(1), 
-			x3 = RB_FrameMarkerX(2), y3 = RB_FrameMarkerY(2), z3 = RB_FrameMarkerZ(2);
+		float m[4][4];
+		float xx, xy, xz, xw, yy, yz, yw, zz, zw;
+		xx = qx * qx; xy = qx * qy; xz = qx * qz; xw = qx * qw;
+		yy = qy * qy; yz = qy * qz; yw = qy * qw; zz = qz * qz; zw = qz * qw;
 
-		/*points[0] = new Vector3(RB_FrameMarkerX(0), RB_FrameMarkerY(0), RB_FrameMarkerZ(0));
-		points[1] = new Vector3(RB_FrameMarkerX(1), RB_FrameMarkerY(1), RB_FrameMarkerZ(1));*/
+		m[0][0]  = 1 - 2 * ( yy + zz );
+		m[0][1]  =     2 * ( xy - zw );
+		m[0][2] =     2 * ( xz + yw );
 
-		float d1 = (x1-x)*(x1-x) + (y1-y)*(y1-y) + (z1-z)*(z1-z);
-		float d2 = (x2-x)*(x2-x) + (y2-y)*(y2-y) + (z2-z)*(z2-z);
-		float d3 = (x3-x)*(x3-x) + (y3-y)*(y3-y) + (z3-z)*(z3-z);
+		m[1][0]  =     2 * ( xy + zw );
+		m[1][1]  = 1 - 2 * ( xx + zz );
+		m[1][2]  =     2 * ( yz - xw );
 
-		float g1[] = {d1, x1, y1, z1}, g2[] = {d2, x2, y2, z2}, g3[] = {d3, x3, y3, z3};
-		float *gs[] = {g1, g2, g3};
-		for (int i = 0; i < 2; ++i) {
-			for (int j = i; j < 3; ++j) {
-				if (*(gs[i]) > *(gs[j])) {
-					float *temp = gs[i];
-					gs[i] = gs[j];
-					gs[j] = temp;
-				}
+		m[2][0]  =     2 * ( xz - yw );
+		m[2][1]  =     2 * ( yz + xw );
+		m[2][2] = 1 - 2 * ( xx + yy );
+
+		m[0][3]=x;
+		m[1][3]=y;
+		m[2][3]=z;
+
+		m[3][0] = m[3][1] = m[3][2] = 0;
+		m[3][3] = 1;
+
+		float left[4];
+		RB_GetRigidBodyMarker(CUE_INDEX,0,&left[0],&left[1],&left[2]);
+		left[3]=1;
+
+		float right[4];
+		RB_GetRigidBodyMarker(CUE_INDEX,2,&right[0],&right[1],&right[2]);
+		right[3]=1;
+
+		float nleft[4];
+		float nright[4];
+
+		for(int i=0; i<4; i++)
+		{
+			float t1=0;
+			float t2=0;
+			for(int j=0; j<4; j++)
+			{
+				t1+=m[i][j]*left[j];
+				t2+=m[i][j]*right[j];
 			}
+			nleft[i]=t1;
+			nright[i]=t2;
 		}
 
 		Vector3 **points = new Vector3*[2];
-		points[0] = new Vector3(gs[2][1], gs[2][2], gs[2][3]);
-		points[1] = new Vector3(gs[0][1], gs[0][2], gs[0][3]);
+		points[0] = new Vector3(nleft[0], nleft[1], nleft[2]);
+		points[1] = new Vector3(nright[0], nright[1], nright[2]);
+		return points;*/
+
+		float m[4][4], c[4];
+		RigidBody::getTransformMatrix(CUE_INDEX, m);
+
+		Vector3 **points = new Vector3*[2];
+		RigidBody::getCoordinate(CUE_INDEX, 0, m, c);
+		points[0] = new Vector3(c[0], c[1], c[2]);
+		RigidBody::getCoordinate(CUE_INDEX, 2, m, c);
+		points[1] = new Vector3(c[0], c[1], c[2]);
+
 		return points;
 
 	}
@@ -77,41 +85,30 @@ Vector3** getCuePoints()
 	return NULL;
 }
 
-//Vector3* getCuePoint1()
-//{
-//	//return Vector3(0,0,0);
-//
-//	if (RB_GetLatestFrame() == NPRESULT_SUCCESS)
-//	{
-//		float x, y, z, qx, qy, qz, qw, h, a, b;
-//		RB_GetRigidBodyLocation(0, &x, &y, &z, &qx, &qy, &qz, &qw, &h, &a, &b);
-//
-//		float x1, y1, z1;
-//		RB_GetRigidBodyMarker(0, 0, &x1, &y1, &z1);
-//		/*float xc, yc, zc;
-//		RB_GetRigidBodyMarker(0, 2, &xc, &yc, &zc);*/
-//
-//		return new Vector3(x1 + x, y1 + y, z1 + z);
-//		/*return Vector3(x, y, z);*/
-//	}
-//
-//	return NULL;
-//
-//	
-//}
-//Vector3* getCuePoint2()
-//{
-//	if (RB_GetLatestFrame() == NPRESULT_SUCCESS)
-//	{
-//		float x, y, z, qx, qy, qz, qw, h, a, b;
-//		RB_GetRigidBodyLocation(0, &x, &y, &z, &qx, &qy, &qz, &qw, &h, &a, &b);
-//
-//		float x1, y1, z1;
-//		RB_GetRigidBodyMarker(0, 1, &x1, &y1, &z1);
-//
-//		return new Vector3(x1 + x, y1 + y, z1 + z);
-//	}
-//
-//	return NULL;
-//}
+Vector3* getObstaclePosition(const int index)
+{
+	/*if (RB_IsRigidBodyTracked(index))
+	{
+		float x, y, z, qx, qy, qz, qw, h, a, b;
+		RB_GetRigidBodyLocation(index, &x, &y, &z, &qx, &qy, &qz, &qw, &h, &a, &b);
+		return new Vector3(x, y, z);
+	}
+	return NULL;*/
+	return RigidBody::getPosition(index);
+}
+
+Vector3* getEyePosition()
+{
+	/*if (RB_IsRigidBodyTracked(EYE_INDEX))
+	{
+		float x, y, z, qx, qy, qz, qw, h, a, b;
+		RB_GetRigidBodyLocation(EYE_INDEX, &x, &y, &z, &qx, &qy, &qz, &qw, &h, &a, &b);
+		return new Vector3(x, y, z);
+	}
+	return NULL;*/
+	return RigidBody::getPosition(EYE_INDEX);
+}
+
+
+
 #endif

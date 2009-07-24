@@ -1,48 +1,28 @@
-/*
------------------------------------------------------------------------------
-This source file is part of OGRE
-(Object-oriented Graphics Rendering Engine)
-For the latest info, see http://www.ogre3d.org/
-
-Copyright (c) 2000-2006 Torus Knot Software Ltd
-Also see acknowledgements in Readme.html
-
-You may use this sample code for anything you like, it is not covered by the
-LGPL like the rest of the engine.
------------------------------------------------------------------------------
-*/
-
-/*
------------------------------------------------------------------------------
-Filename:    BspCollision.cpp
-Description: Somewhere to play in the sand...
------------------------------------------------------------------------------
-*/
 
 #include "stdafx.h"
 #include "BilliardCollisionListener.h"
-
-// Hacky globals
 
 
 class BspCollisionApplication : public ExampleRefAppApplication
 {
 public:
-	BspCollisionApplication() {
-
+	BspCollisionApplication() 
+	{
 	}
 
 	~BspCollisionApplication() 
 	{
-		//delete rsq;
 	}
 
 protected:
+	//The white ball
 	ApplicationObject *ball;
+	//The other nine balls
 	ApplicationObject *balls[9];
-	ApplicationObject *cueNode;
-	SceneNode* targetNode;
-	SceneNode* lineNode;
+	//Obstacle *obstacle[2];
+	ApplicationObject *obstacle;
+	SceneNode *cueNode;
+	RigidBody* bodies[2];
 
 	void chooseSceneManager(void)
 	{
@@ -69,52 +49,19 @@ protected:
 		// modify camera for close work
 		mCamera->setNearClipDistance(10);
 		mCamera->setFarClipDistance(20000);
-		mCamera->setPosition(0, 500, 0);
+		mCamera->setPosition(0, 325, 0);
 		mCamera->pitch(Degree(-90));
+		mCamera->setFixedYawAxis(true,Vector3::UNIT_Z);
 		//mCamera->yaw(Degree(-90));
-
+		
+		//Create the white ball
 		ball = mWorld->createBall("ball", 4,Vector3(-100, 9, 0));
 		ball->setDynamicsEnabled(true);
 		ball->getEntity()->setMaterialName("WhiteBall");
 		ball->setMassSphere(1,4);
 		ball->setBounceParameters(1.0,0.5);
 
-		Entity* bas = mSceneMgr->createEntity("bas","bas.mesh");
-		SceneNode* basNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-		bas->setMaterialName("Billiards/Bas");
-		basNode->attachObject(bas);
-		basNode->scale(3,3,3);
-		basNode->setPosition(-0.5,7,0);
-
-		Entity* targetEnt = mSceneMgr->createEntity("target", "sphere.mesh");
-		MaterialPtr mat = MaterialManager::getSingleton().create("targeter", 
-			ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-		Pass* pass = mat->getTechnique(0)->getPass(0);
-		TextureUnitState* tex = pass->createTextureUnitState();
-		tex->setColourOperationEx(LBX_SOURCE1, LBS_MANUAL, LBS_CURRENT, 
-			ColourValue::Red);
-		pass->setLightingEnabled(false);
-		pass->setSceneBlending(SBT_ADD);
-		pass->setDepthWriteEnabled(false);
-
-		targetEnt->setMaterialName("targeter");
-		targetEnt->setCastShadows(false);
-		targetEnt->setQueryFlags(0);
-		targetNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("targetNode");
-		targetNode->scale(0.04, 0.04, 0.04);
-		targetNode->attachObject(targetEnt);
-		
-		Ogre::ManualObject* line=mSceneMgr->createManualObject("line");
-		line->begin("",Ogre::RenderOperation::OT_LINE_LIST);
-		//line->position(ball->getPosition().x,9,0);
-		for (int i=1;i<124;i+=4)
-		{
-			line->position(ball->getPosition().x+i,9,0);
-		}
-		line->end();
-		lineNode=mSceneMgr->getRootSceneNode()->createChildSceneNode("lineNode");
-		lineNode->attachObject(line);
-
+		//Create the other nine balls
 		int j=1;
 		for (int i=1;i<5;i++)
 		{
@@ -140,25 +87,30 @@ protected:
 		balls[8]->getEntity()->setMaterialName("Ball9");
 		balls[8]->setMassSphere(1,4);
 		balls[8]->setBounceParameters(1.0,0.5);
-
-		cueNode = mWorld->createOgreObject("cue","cue.mesh",2,2,124,Vector3(0,9,0));
-		//cueNode->setDynamicsEnabled(true);
-		cueNode->getEntity()->setMaterialName("Billiards/Cue");
-		cueNode->setMassBox(10,Vector3(4,4,124));
+		
+		//Create the cue
+		Entity* cue = mSceneMgr->createEntity("cue","cue.mesh");
+		cueNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("cueNode");
+		cue->setMaterialName("Billiards/Cue");
+		cueNode->attachObject(cue);
 		cueNode->roll(Degree(-90));
+		cueNode->setPosition(-100,9,0);
 
+		//Create the table
 		OgreRefApp::OgreObject* table=mWorld->createOgreObject("table","table1.mesh",300,10,147,Vector3(-0.5,0,0));
 		table->getEntity()->setMaterialName("Billiards/Table");
 		table->pitch(Degree(90));
 		table->getSceneNode()->scale(0.98,1,1);
-
 		
+		//Create the pocket
+		Entity* pocket = mSceneMgr->createEntity("bas","bas.mesh");
+		SceneNode* pocketNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+		pocket->setMaterialName("Billiards/Bas");
+		pocketNode->attachObject(pocket);
+		pocketNode->scale(3,3,3);
+		pocketNode->setPosition(-0.5,7,0);
 
-
-
-		/*OgreRefApp::Box* box= mWorld->createBox("table", 300,10,147, Vector3(0,0,0));
-		box->getEntity()->setMaterialName("Billiards/Table");*/
-
+		//Create the cushions
 		OgreRefApp::Box* box=mWorld->createBox("top",5,15,132,Vector3(150,2.5,0));
 		box->getEntity()->setMaterialName("Billiards/Table");
 
@@ -189,14 +141,24 @@ protected:
 		box=mWorld->createBox("rightout",305,15,15,Vector3(0,2.5,86));
 		box->getEntity()->setMaterialName("Billiards/Wood");
 
+		bodies[0]=new RigidBody(TRIANGLE_OBSTACLE);
+		//bodies[1]=new RigidBody(SQUARE_OBSTACLE);
+		/*obstacle[0]=new Obstacle(mWorld,bodies[0]->getVertexCount(),"triangle");
+		obstacle[1]=new Obstacle(mWorld,bodies[1]->getVertexCount(),"square");*/
+
+		obstacle=mWorld->createBox("obstacle",20,20,20,Vector3(0,0,0));
+		obstacle->getEntity()->setMaterialName("Billiards/Obstacle");
+
 		mWorld->_applyCollision();
 		mCamera->setCollisionEnabled(false);
 		mCamera->getRealCamera()->setQueryFlags(0);
+
+		
 	}
 	// Create new frame listener
 	void createFrameListener(void)
 	{
-		mFrameListener= new BilliardCollisionListener(mWindow, mCamera,mWorld,ball,balls,cueNode,mSceneMgr);
+		mFrameListener= new BilliardCollisionListener(mWindow, mCamera,mWorld,ball,balls,bodies,obstacle,cueNode);
 		mRoot->addFrameListener(mFrameListener);
 	}
 
@@ -240,10 +202,3 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
-
-
-
-
-
-

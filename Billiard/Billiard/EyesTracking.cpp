@@ -5,40 +5,40 @@
 #include "NPRigidBody.h"
 #include "EyesTracking.h"
 
-void CheckResult(NPRESULT result)   //== CheckResult function will display errors and ---
-//== exit application after a key is pressed =====---
-{
-	if(result==NPRESULT_SUCCESS)    //== If there is no error, do nothing ============---
-		return;
+//void CheckResult(NPRESULT result)   //== CheckResult function will display errors and ---
+////== exit application after a key is pressed =====---
+//{
+//	if(result==NPRESULT_SUCCESS)    //== If there is no error, do nothing ============---
+//		return;
+//
+//	//printf("Error: %s\n\n(Press any key to continue)\n",NP_GetResultString(result));
+//
+//	getchar();
+//
+//	//exit(1);
+//}
 
-	//printf("Error: %s\n\n(Press any key to continue)\n",NP_GetResultString(result));
-
-	getchar();
-
-	//exit(1);
-}
-
-void EyesTracking::Initialize(const char* calibFile, const char* glassDef)
-{
-	RB_InitializeRigidBody();
-	CheckResult(RB_LoadProfile(calibFile));
-	CheckResult(RB_LoadDefinition(glassDef));
-	CheckResult(RB_StartCameras());
-}
-
-void EyesTracking::Terminate()
-{
-	RB_StopCameras();
-	RB_ShutdownRigidBody();
-}
+//void EyesTracking::Initialize(const char* calibFile, const char* glassDef)
+//{
+//	RB_InitializeRigidBody();
+//	CheckResult(RB_LoadProfile(calibFile));
+//	CheckResult(RB_LoadDefinition(glassDef));
+//	CheckResult(RB_StartCameras());
+//}
+//
+//void EyesTracking::Terminate()
+//{
+//	RB_StopCameras();
+//	RB_ShutdownRigidBody();
+//}
 
 bool EyesTracking::GetEyesPosition(double& leftx, double& lefty, double& leftz, double& rightx, double& righty, double& rightz)
 {
 	//CheckResult(RB_GetLatestFrame());
 	static float lastlx, lastly, lastlz, lastrx, lastry, lastrz;
-	if (RB_GetLatestFrame()==NPRESULT_SUCCESS)
-	{
-		if (RB_IsRigidBodyTracked(0))
+	//if (RB_GetLatestFrame()==NPRESULT_SUCCESS)
+	//{
+		if (RB_IsRigidBodyTracked(EYE_INDEX))
 		{
 // 		float cx,cy,cz,q0,q1,q2;
 // 		float x1, x2, y1, y2, z1, z2;
@@ -60,7 +60,7 @@ bool EyesTracking::GetEyesPosition(double& leftx, double& lefty, double& leftz, 
 // 		fprintf(stderr,"\nleft: (%f, %f, %f), right: (%f, %f, %f)",leftx,lefty,leftz,rightx,righty,rightz);
 // 		return true;
 		float x,y,z,qx,qy,qz,qw,heading,attitude,bank;
-		RB_GetRigidBodyLocation(0,&x,&y,&z,&qx,&qy,&qz,&qw,&heading,&attitude,&bank);
+		RB_GetRigidBodyLocation(EYE_INDEX,&x,&y,&z,&qx,&qy,&qz,&qw,&heading,&attitude,&bank);
 
 		float m[4][4];
 		float xx,xy,xz,xw,yy,yz,yw,zz,zw;
@@ -88,11 +88,11 @@ bool EyesTracking::GetEyesPosition(double& leftx, double& lefty, double& leftz, 
 		m[3][3] = 1;
 
 		float left[4];
-		RB_GetRigidBodyMarker(0,0,&left[0],&left[1],&left[2]);
+		RB_GetRigidBodyMarker(EYE_INDEX,0,&left[0],&left[1],&left[2]);
 		left[3]=1;
 
 		float right[4];
-		RB_GetRigidBodyMarker(0,1,&right[0],&right[1],&right[2]);
+		RB_GetRigidBodyMarker(EYE_INDEX,1,&right[0],&right[1],&right[2]);
 		right[3]=1;
 
 		float nleft[4];
@@ -127,11 +127,11 @@ bool EyesTracking::GetEyesPosition(double& leftx, double& lefty, double& leftz, 
 		return true;
 		}
 		else fprintf(stderr,"\nnot tracked");
-	}
-	else
-	{
-		fprintf(stderr,"\nWaiting to get frame ready...");
-	}
+	//}
+	//else
+	//{
+		//fprintf(stderr,"\nWaiting to get frame ready...");
+	//}
 	leftx=lastlx; lefty=lastly; leftz=lastlz;
 	rightx=lastrx; righty=lastry; rightz=lastrz;
 	return false;
