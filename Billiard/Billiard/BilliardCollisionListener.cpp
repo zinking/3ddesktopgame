@@ -5,29 +5,98 @@
 #include "Obstacle.h"
 
 BilliardCollisionListener::BilliardCollisionListener(RenderWindow* win, CollideCamera* cam,World* world,
-						  ApplicationObject *ball,ApplicationObject *balls[9],RigidBody *bodies[2],
-						  ApplicationObject *obstacle,SceneNode *cueNode)
-						  : MyFrameListener(win, cam)
+							RigidBody *bodies[2]): MyFrameListener(win, cam)
 {
 	mWorld=world;
+	ogre2dManager=new Ogre2dManager;
+	Ogre::TextureManager::getSingleton().load("currentPlayer.png",ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	Ogre::TextureManager::getSingleton().load("playerWaiting.png",ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	ogre2dManager->init(mWorld->getSceneManager(),Ogre::RENDER_QUEUE_OVERLAY,true);
+
 	this->camera=cam;
-	this->ball=ball;
+	this->ball=mWorld->getApplicationObject("ball");
 	for (int i=0;i<9;i++)
-	{
-		this->balls[i]=balls[i];
-		visible[i]=true;
-	}
+		this->balls[i]=mWorld->getApplicationObject("ball"+StringConverter::toString(i+1));
+	for (int i=0;i<6;i++)
+		this->cussions[i]=mWorld->getApplicationObject("cussion"+StringConverter::toString(i));
 	for (int i=0;i<2;i++)
-	{
 		this->bodies[i]=bodies[i];
-		//this->obstacle[i]=obstacle[i];
-	}
-	this->obstacle=obstacle;
-	this->cueNode=cueNode;
+	this->obstacle=mWorld->getApplicationObject("obstacle");
+	this->cueNode=mWorld->getSceneManager()->getSceneNode("cueNode");
+
 	whiteBallDropped=false;
 	angle=0;
 	angleUp=0;
 	lastPosition=cueNode->getPosition();
+	startGame=false;
+	isBallHit=false;
+	firstHit=false;
+	for (int i=0;i<10;i++)
+	{
+		pocketSoundPlayed[i]=false;
+	}
+	GameRuleManager::getSingleton()->startNewGame();
+	new TextRenderer();
+	TextRenderer::getSingleton().addTextBox("player1", "Player 1", 125, 425, 100, 20, Ogre::ColourValue::White);
+	TextRenderer::getSingleton().addTextBox("player2", "Player 2", 470, 425, 100, 20, Ogre::ColourValue::White);
+	TextRenderer::getSingleton().addTextBox("scorep1", "0", 125, 445, 100, 20, Ogre::ColourValue::White);
+	TextRenderer::getSingleton().addTextBox("scorep2", "0", 470, 445, 100, 20, Ogre::ColourValue::White);
+
+	c=0;
+}
+
+
+bool BilliardCollisionListener::whiteBallPosInUse(Vector3 pos)
+{
+	for (int i=0;i<9;i++)
+	{
+		if ((pos-balls[i]->getPosition()).length()<=8)
+			return true;
+	}
+	return false;
+}
+
+void BilliardCollisionListener::resetWhiteBall()
+{
+	ball->setLinearVelocity(0,0,0);
+	ball->setAngularVelocity(0,0,0);
+	Vector3 position=Vector3(-100,9,0);
+	if (whiteBallPosInUse(position))
+	{
+		for (int p=-140;p<140;p++)
+		{
+			position=Vector3(p,9,0);
+			if (!whiteBallPosInUse(position))
+				break;
+		}
+	}
+	ball->setPosition(position);
+	ball->setCollisionEnabled(true);
+	pocketSoundPlayed[0]=false;
+}
+
+void BilliardCollisionListener::resetBalls()
+{
+	int j=1;
+	for (int i=1;i<5;i++)
+	{
+		balls[i-1]->setPosition(80+8*(i/2),9,4*(i/2)*j);
+		j=-j;
+	}
+	for (int i=5;i<9;i++)
+	{
+		balls[i-1]->setPosition(80+8*(i/2),9,(8-((i-4)/2)*4)*j);
+		j=-j;
+	}
+	balls[8]->setPosition(96,9,0);
+	for (int i=0;i<9;i++)
+	{
+		balls[i]->setLinearVelocity(0,0,0);
+		balls[i]->setAngularVelocity(0,0,0);
+		balls[i]->getEntity()->setVisible(true);
+		balls[i]->setCollisionEnabled(true);
+		pocketSoundPlayed[i+1]=false;
+	}
 }
 
 //Check whether all the balls are stopped
@@ -41,22 +110,51 @@ bool BilliardCollisionListener::ballsStopped()
 	}
 	
 	if (ball->getLinearVelocity().length()==0&&i==9)
+	{
 		return true;
+	}
 	else
 		return false;
 }
 
-//Adjust the balls' velocities
-void BilliardCollisionListener::adjustBallVelocities()
+void BilliardCollisionListener::handlePlayer()
 {
+	if(mKeyboard->isKeyDown(OIS::KC_R))
+	{
+		startGame=false;
+		GameRuleManager::getSingleton()->startNewGame();
+	}
+	TextRenderer::getSingleton().setText("scorep1",
+		StringConverter::toString(GameRuleManager::getSingleton()->getScore(PLAYER1)));
+	TextRenderer::getSingleton().setText("scorep2",
+		StringConverter::toString(GameRuleManager::getSingleton()->getScore(PLAYER2)));
+	switch(GameRuleManager::getSingleton()->getCurrentTurn())
+	{
+	case PLAYER1:
+		ogre2dManager->spriteBltFull("currentPlayer.png",-0.8,-0.75,-0.6,-1);
+		ogre2dManager->spriteBltFull("playerWaiting.png",0.8,-0.75,0.6,-1);
+		break;
+	case PLAYER2:
+		ogre2dManager->spriteBltFull("playerWaiting.png",-0.8,-0.75,-0.6,-1);
+		ogre2dManager->spriteBltFull("currentPlayer.png",0.8,-0.75,0.6,-1);
+		break;
+	}
+	
+}
+
+//Adjust the balls' velocities
+void BilliardCollisionListener::handleBallVelocities()
+{
+	if (!startGame)
+	{
+		resetWhiteBall();
+		resetBalls();
+	}
 	//If the white ball is dropped, take it onto the table and set
 	//its velocity to zero.
 	if (whiteBallDropped)
-	{
-		ball->setLinearVelocity(0,0,0);
-		ball->setAngularVelocity(0,0,0);
-		ball->setPosition(-100,9,0);
-	}
+		resetWhiteBall();
+	
 	//If the balls' velocity is less than the threshold of the
 	//velocity, then set the velocity to zero. If this is not done, 
 	//the physical engine will finally make the balls move extremely
@@ -94,6 +192,47 @@ void BilliardCollisionListener::adjustBallVelocities()
 
 }
 
+void BilliardCollisionListener::handleBallCollision()
+{
+	for (int i=0;i<6;i++)
+	{
+		if(ball->testCollide(cussions[i]))
+			AudioManager::getSingleton()->ballCollideEdge();
+	}
+	for (int i=0;i<9;i++)
+	{
+		for (int k=0;k<6;k++)
+		{
+			if(balls[i]->testCollide(cussions[k]))
+				AudioManager::getSingleton()->ballCollideEdge();
+		}
+		if(ball->testCollide(balls[i])
+			&&(ball->getLinearVelocity().length()!=0
+			||balls[i]->getLinearVelocity().length()!=0))
+		{
+			whiteBallDropped=false;
+			if (!firstHit)
+			{
+				firstHit=true;
+				GameRuleManager::getSingleton()->hitFirstBall(i+1);
+			}
+			AudioManager::getSingleton()->ballCollide();
+		}
+		for (int j=i+1;j<9;j++)
+		{
+			if (balls[i]->testCollide(balls[j])
+				&&(balls[i]->getLinearVelocity().length()!=0
+				||balls[j]->getLinearVelocity().length()!=0)
+				&&startGame)
+			{
+				AudioManager::getSingleton()->ballCollide();
+			}
+		}
+	}
+	if (ballsStopped())
+		firstHit=false;
+}
+
 void BilliardCollisionListener::handleBallDropping()
 {
 	Vector3 tmp=ball->getPosition();
@@ -104,7 +243,12 @@ void BilliardCollisionListener::handleBallDropping()
 		//Disable the collision detection of the ball so that it can drop down. 
 		ball->setCollisionEnabled(false);
 		ball->setLinearVelocity(0,-50,0);
-		
+		if(!pocketSoundPlayed[0])
+		{
+			AudioManager::getSingleton()->ballIntoPocket();
+			pocketSoundPlayed[0]=true;
+			GameRuleManager::getSingleton()->potABall(0);
+		}
 	}
 	//If the white ball's position is lower than -100 then make it stop.
 	if (ball->getPosition().y<-100)
@@ -115,6 +259,7 @@ void BilliardCollisionListener::handleBallDropping()
 		if (ballsStopped())
 		{
 			ball->setCollisionEnabled(true);
+			pocketSoundPlayed[0]=false;
 			whiteBallDropped=true;
 		}
 	}
@@ -127,12 +272,17 @@ void BilliardCollisionListener::handleBallDropping()
 		{
 			balls[i]->setCollisionEnabled(false);
 			balls[i]->setLinearVelocity(0,-50,0);
-			if (balls[i]->getPosition().y<-100)
+			if (!pocketSoundPlayed[i+1])
 			{
-				balls[i]->setLinearVelocity(0,0,0);
-				balls[i]->getSceneNode()->setVisible(false);
-				visible[i]=false;
+				AudioManager::getSingleton()->ballIntoPocket();
+				pocketSoundPlayed[i+1]=true;
+				GameRuleManager::getSingleton()->potABall(i+1);
 			}
+		}
+		if (balls[i]->getPosition().y<-100)
+		{
+			balls[i]->setLinearVelocity(0,0,0);
+			balls[i]->getSceneNode()->setVisible(false);
 		}
 	}
 }
@@ -194,10 +344,26 @@ void BilliardCollisionListener::handleCamera()
 
 void BilliardCollisionListener::handleCue()
 {
+	isBallHit=false;
 	Vector3 **cuePoints = NULL;
 	if (isFrameAvailable()) {
 		handleCamera();
 		handleObstacle();
+		if (ballsStopped())
+		{
+			if (!hitEnded)
+			{
+				hitEnded=true;
+				switch(GameRuleManager::getSingleton()->endHit())
+				{
+				case GAME_OVER:
+					startGame=false;
+					//AudioManager::getSingleton()->gameEnd();
+					GameRuleManager::getSingleton()->startNewGame();
+					break;
+				}
+			}
+			cueNode->setVisible(true);
 		//Read the points' position on the cue.
 		cuePoints = getCuePoints();
 		if (cuePoints != NULL)
@@ -242,7 +408,14 @@ void BilliardCollisionListener::handleCue()
 			if (d<=TOUCH_DISTANCE&&d<lastD[0]&&ang.valueDegrees()<90&&touchPosition<=CUE_LENGTH
 				&&touchPosition>=0)
 			{
+				startGame=true;
 				whiteBallDropped=false;
+				if (hitEnded)
+				{
+					mDebugText=StringConverter::toString(++c);
+					AudioManager::getSingleton()->hitBall();
+					GameRuleManager::getSingleton()->startHit(0);
+				}
 				//Calculate the ball's velocity according to the change of the position of the touch point.
 				ball->setLinearVelocity(
 					0.5*(Vector3(cueNode->getPosition().x-touchPosition*cos(angle.valueRadians()),0,
@@ -250,6 +423,8 @@ void BilliardCollisionListener::handleCue()
 					-Vector3(lastPosition.x-touchPosition*cos(lastAngle.valueRadians()),0,
 					lastPosition.z-touchPosition*sin(lastAngle.valueRadians())))
 					/timeSinceLastFrame);
+				hitEnded=false;
+				isBallHit=true;
 			}
 			lastD[0]=d;
 			for (int i=0;i<9;i++)
@@ -260,19 +435,27 @@ void BilliardCollisionListener::handleCue()
 				if (d<=TOUCH_DISTANCE&&d<lastD[i]&&ang.valueDegrees()<90&&touchPosition<=CUE_LENGTH
 					&&touchPosition>=0)
 				{
-					whiteBallDropped=false;
+					startGame=true;
+					if (hitEnded)
+					{
+						mDebugText=StringConverter::toString(++c);
+						AudioManager::getSingleton()->hitBall();
+						GameRuleManager::getSingleton()->startHit(i+1);
+					}
 					balls[i]->setLinearVelocity(
 						0.5*(Vector3(cueNode->getPosition().x-touchPosition*cos(angle.valueRadians()),0,
 						cueNode->getPosition().z-touchPosition*sin(angle.valueRadians()))
 						-Vector3(lastPosition.x-touchPosition*cos(lastAngle.valueRadians()),0,
 						lastPosition.z-touchPosition*sin(lastAngle.valueRadians())))
 						/timeSinceLastFrame);
+					
+					hitEnded=false;
+					isBallHit=true;
 				}
 				lastD[i+1]=d;
 			}
 			lastPosition=cueNode->getPosition();
 			lastAngle=angle;
-			
 		}
 		else
 		{
@@ -280,11 +463,16 @@ void BilliardCollisionListener::handleCue()
 			//set the cue to the position in last frame. 
 			cueNode->setPosition(lastPosition);
 		}
+		}
+		else
+			cueNode->setVisible(false);
 	}
-	else
+	else if(ballsStopped())
 	{
 		cueNode->setPosition(lastPosition);
 	}
+	else
+		cueNode->setVisible(false);
 	
 	if (cuePoints != NULL)
 	{

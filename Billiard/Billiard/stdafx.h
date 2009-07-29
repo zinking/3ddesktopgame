@@ -3,7 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <assert.h>
+
 #include <vector>
+#include <cmath>
 
 #include <OgreVector3.h>
 using Ogre::Vector3;
@@ -19,13 +22,12 @@ using namespace StereoGraphics;
 
 using std::vector;
 
-#define SCREEN_LEFT -33.5
-#define SCREEN_RIGHT 33.5
-#define SCREEN_TOP 25.3
-#define SCREEN_BOTTOM -25.3
+#define SCREEN_LEFT -34.4
+#define SCREEN_RIGHT 28.8
+#define SCREEN_TOP 23.0
+#define SCREEN_BOTTOM -27.4
 
 #define CUE_INDEX 0
-
 #define EYE_INDEX 2
 
 #define TRIANGLE_OBSTACLE 1
@@ -33,10 +35,10 @@ using std::vector;
 
 #define OFFSET_X	0.035
 #define OFFSET_Y	0.015
-#define OFFSET_Z	0.01
+#define OFFSET_Z	-0.015
 #define RATIO_X		530
 #define RATIO_Y		500
-#define RATIO_Z		500
+#define RATIO_Z		510
 
 #define CUE_LENGTH	124
 #define VELOCITY_THRESHOLD	0.1

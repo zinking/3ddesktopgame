@@ -173,6 +173,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\AudioManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Billiard.cpp"
 				>
 			</File>
@@ -184,6 +188,22 @@
 				RelativePath=".\EyesTracking.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\GameRuleManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ogre2d-main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RigidBody.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TextRenderer.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -191,11 +211,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\AudioManager.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BilliardCollisionListener.h"
 				>
 			</File>
 			<File
 				RelativePath=".\EyesTracking.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Fmod.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GameRuleManager.h"
 				>
 			</File>
 			<File
@@ -215,7 +247,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Obstacle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ogre2d-main.h"
+				>
+			</File>
+			<File
 				RelativePath=".\optitrack.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RigidBody.h"
 				>
 			</File>
 			<File
@@ -224,6 +268,10 @@
 			</File>
 			<File
 				RelativePath=".\StereoGraphics.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TextRenderer.h"
 				>
 			</File>
 		</Filter>

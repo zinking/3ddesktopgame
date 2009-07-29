@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 #include "BilliardCollisionListener.h"
-
+#include "AudioManager.h"
 
 class BspCollisionApplication : public ExampleRefAppApplication
 {
@@ -20,6 +20,7 @@ protected:
 	//The other nine balls
 	ApplicationObject *balls[9];
 	//Obstacle *obstacle[2];
+	ApplicationObject *cussions[6];
 	ApplicationObject *obstacle;
 	SceneNode *cueNode;
 	RigidBody* bodies[2];
@@ -94,7 +95,7 @@ protected:
 		cue->setMaterialName("Billiards/Cue");
 		cueNode->attachObject(cue);
 		cueNode->roll(Degree(-90));
-		cueNode->setPosition(-100,9,0);
+		cueNode->setPosition(-150,9,0);
 
 		//Create the table
 		OgreRefApp::OgreObject* table=mWorld->createOgreObject("table","table1.mesh",300,10,147,Vector3(-0.5,0,0));
@@ -111,32 +112,38 @@ protected:
 		pocketNode->setPosition(-0.5,7,0);
 
 		//Create the cushions
-		OgreRefApp::Box* box=mWorld->createBox("top",5,15,132,Vector3(150,2.5,0));
+		OgreRefApp::Box* box=mWorld->createBox("cussion0",5,15,132,Vector3(150,2.5,0));
 		box->getEntity()->setMaterialName("Billiards/Table");
+		cussions[0]=box;
 
 		box=mWorld->createBox("topout",15,15,187,Vector3(160,2.5,0));
 		box->getEntity()->setMaterialName("Billiards/Wood");
 
-		box=mWorld->createBox("bottom",5,15,132,Vector3(-150,2.5,0));
+		box=mWorld->createBox("cussion1",5,15,132,Vector3(-150,2.5,0));
 		box->getEntity()->setMaterialName("Billiards/Table");
+		cussions[1]=box;
 
 		box=mWorld->createBox("bottomout",15,15,187,Vector3(-160,2.5,0));
 		box->getEntity()->setMaterialName("Billiards/Wood");
 
-		box=mWorld->createBox("lefttop",135,15,5,Vector3(73.5,2.5,-76));
+		box=mWorld->createBox("cussion2",135,15,5,Vector3(73.5,2.5,-76));
 		box->getEntity()->setMaterialName("Billiards/Table");
+		cussions[2]=box;
 
-		box=mWorld->createBox("leftbottom",135,15,5,Vector3(-73.5,2.5,-76));
+		box=mWorld->createBox("cussion3",135,15,5,Vector3(-73.5,2.5,-76));
 		box->getEntity()->setMaterialName("Billiards/Table");
+		cussions[3]=box;
 
 		box=mWorld->createBox("leftout",305,15,15,Vector3(0,2.5,-86));
 		box->getEntity()->setMaterialName("Billiards/Wood");
 
-		box=mWorld->createBox("righttop",135,15,5,Vector3(73.5,2.5,76));
+		box=mWorld->createBox("cussion4",135,15,5,Vector3(73.5,2.5,76));
 		box->getEntity()->setMaterialName("Billiards/Table");
+		cussions[4]=box;
 
-		box=mWorld->createBox("rightbottom",135,15,5,Vector3(-73.5,2.5,76));
+		box=mWorld->createBox("cussion5",135,15,5,Vector3(-73.5,2.5,76));
 		box->getEntity()->setMaterialName("Billiards/Table");
+		cussions[5]=box;
 
 		box=mWorld->createBox("rightout",305,15,15,Vector3(0,2.5,86));
 		box->getEntity()->setMaterialName("Billiards/Wood");
@@ -153,12 +160,12 @@ protected:
 		mCamera->setCollisionEnabled(false);
 		mCamera->getRealCamera()->setQueryFlags(0);
 
-		
+		AudioManager::getSingleton()->playBackgroundMusic();
 	}
 	// Create new frame listener
 	void createFrameListener(void)
 	{
-		mFrameListener= new BilliardCollisionListener(mWindow, mCamera,mWorld,ball,balls,bodies,obstacle,cueNode);
+		mFrameListener= new BilliardCollisionListener(mWindow, mCamera,mWorld,bodies);
 		mRoot->addFrameListener(mFrameListener);
 	}
 
@@ -179,8 +186,8 @@ int main(int argc, char **argv)
 #endif
 {
 
-	SetProjectorViewport(SCREEN_LEFT, SCREEN_RIGHT,SCREEN_BOTTOM, SCREEN_TOP);
-	SetNearClipDistance(0.0001);
+	//SetProjectorViewport(SCREEN_LEFT, SCREEN_RIGHT,SCREEN_BOTTOM, SCREEN_TOP);
+	//SetNearClipDistance(0.0001);
 	RB_InitializeRigidBody();
 	RB_LoadProfile("cal.cal");
 	RB_LoadDefinition("rbd.rdef");
