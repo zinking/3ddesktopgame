@@ -5,11 +5,6 @@ RigidBody::RigidBody(const int index)
 					: rbIndex(index), 
 					vertices(RB_GetRigidBodyMarkerCount(index))
 {
-	/*int count = RB_GetRigidBodyMarkerCount(rbIndex);
-	for (int i = 0; i < count; ++i)
-	{
-		vertices.push_back(Vector3(0, 0, 0));
-	}*/
 }
 
 int RigidBody::getVertexCount() const

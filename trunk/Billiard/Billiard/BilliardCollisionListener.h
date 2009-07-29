@@ -8,6 +8,10 @@
 #include "OgreStringConverter.h"
 #include "RigidBody.h"
 #include "Obstacle.h"
+#include "AudioManager.h"
+#include "GameRuleManager.h"
+#include "ogre2d-main.h"
+#include "TextRenderer.h"
 #include "stdafx.h"
 
 // Event handler to add ability to alter curvature
@@ -21,10 +25,11 @@ private:
 	bool whiteBallDropped;
 
 	ApplicationObject *balls[9];
-	bool visible[9];
+	//bool visible[9];
 
 	//Obstacle *obstacle[2];
 	ApplicationObject *obstacle;
+	ApplicationObject *cussions[6];
 	Radian obstacleAngle;
 	RigidBody *bodies[2];
 	SceneNode *cueNode;
@@ -36,36 +41,45 @@ private:
 	float lastD[10];
 	Radian lastAngle;
 
+	Ogre2dManager* ogre2dManager;
+
 	Real timeSinceLastFrame;
 	
 	float camAngle;
 	float camTrans;
 
+	bool startGame;
+	bool isBallHit;
+	bool firstHit;
+	bool hitEnded;
+	bool pocketSoundPlayed[10];
 
+	int c;
+
+	bool whiteBallPosInUse(Vector3 pos);
+	void resetWhiteBall();
+	void resetBalls();
 	bool ballsStopped();
-	void adjustBallVelocities();
+	void handlePlayer();
+	void handleBallVelocities();
+	void handleBallCollision();
 	void handleBallDropping();
 	void handleCue();
 	void handleObstacle();
 	void handleCamera();
 
 public:
-	BilliardCollisionListener(RenderWindow* win, CollideCamera* cam,World* world,
-		ApplicationObject *ball,ApplicationObject *balls[9],RigidBody *bodies[2],
-		ApplicationObject *obstacle,SceneNode *cueNode);
+	BilliardCollisionListener(RenderWindow* win, CollideCamera* cam,World* world,RigidBody *bodies[2]);
 
 	bool frameStarted(const FrameEvent& evt)
 	{
 		timeSinceLastFrame=evt.timeSinceLastFrame;
-		adjustBallVelocities();
+		handlePlayer();
+		handleBallVelocities();
 		handleBallDropping();
 		handleCue();
-		//if((ball->getPosition()-balls[0]->getPosition()).length()<=8&&!ballsStoped())
-		//{
-		//	c++;
-		//	mDebugText=StringConverter::toString(c);
-		//	//PlaySound(TEXT ("215.wav"), NULL, SND_FILENAME | SND_ASYNC);
-		//}
+		handleBallCollision();
+		
 		return true;
 	}
 };
